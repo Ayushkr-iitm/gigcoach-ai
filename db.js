@@ -1,15 +1,14 @@
-// db.js - Database Connection File
+// db.js - Updated for Deployment
 const { Pool } = require('pg');
+require('dotenv').config();
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'gigcoach_db',
-  password: 'Ayush@1234', // <<< CHANGE THIS TO YOUR REAL PASSWORD
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
-// Test the connection
 pool.query('SELECT NOW()', (err, res) => {
   if (err) {
     console.error('Database connection error:', err);
