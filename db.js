@@ -1,13 +1,19 @@
-// db.js - Updated for Deployment
 const { Pool } = require('pg');
 require('dotenv').config();
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
+// Set up a config object
+const connectionConfig = {
+  connectionString: process.env.DATABASE_URL
+};
+
+// Add SSL configuration ONLY when in a production environment (like on Render)
+if (process.env.NODE_ENV === 'production') {
+  connectionConfig.ssl = {
     rejectUnauthorized: false
-  }
-});
+  };
+}
+
+const pool = new Pool(connectionConfig);
 
 pool.query('SELECT NOW()', (err, res) => {
   if (err) {
